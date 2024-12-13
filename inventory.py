@@ -2,8 +2,18 @@
 Author: Catelynn Barfell
 Date: 12/08/2024
 Assignment: Module 8 Final Project
-Short Desc:
+Short Desc: Inventory Module
+This module handles all operations related to managing inventory in the BC Food Pantry system.
 
+Functions:
+- `load_items`: Retrieves all items from the inventory.
+- `add_item`: Adds a new item to the inventory.
+- `update_stock`: Updates the stock quantity of an item in the inventory.
+- `remove_item`: Removes an item from the inventory.
+- `update_quantity`: Updates the quantity of an existing item in the inventory.
+
+Dependencies:
+- `connect_db`
 """
 
 from database import connect_db
@@ -22,13 +32,6 @@ class Inventory:
     # Add an item to the inventory
     @staticmethod
     def add_item(name, type_, quantity, expiration_date):
-        """    
-        Args:
-            name (str): Name of the item.
-            type_ (str): Type of the item (Perishable/Non-Perishable).
-            quantity (int): Quantity of the item.
-            expiration_date (str): Expiration date of the item.
-        """
         conn = connect_db()
         cursor = conn.cursor()
         cursor.execute("""
@@ -38,7 +41,7 @@ class Inventory:
         conn.commit()
         conn.close()
 
-    # Update stock of item in the inventory 
+    # Update stock of an existing item in the inventory 
     @staticmethod
     def update_stock(name, quantity):
         conn = connect_db()
@@ -58,18 +61,6 @@ class Inventory:
         cursor.execute(
             "DELETE FROM inventory WHERE name = ?", 
             (name,)
-        )
-        conn.commit()
-        conn.close()
-
-    # Update quantity of an item in the inventory
-    @staticmethod
-    def update_quantity(name, quantity):
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute(
-            "UPDATE inventory SET quantity = ? WHERE name = ?", 
-            (quantity, name)
         )
         conn.commit()
         conn.close()

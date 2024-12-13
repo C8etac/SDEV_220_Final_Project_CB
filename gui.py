@@ -3,9 +3,38 @@ Author: Catelynn Barfell
 Date: 12/03/2024
 Assignment: Module 8 Final Project
 Short Desc: GUI Module
-Manages the GUI for the BC Food Pantry system.
+This module manages the graphical user interface (GUI) for the BC Food Pantry system.
+
 Classes:
-- `FoodPantryApp`: Main application class, which sets up the GUI tabs and widgets.
+- `FoodPantryApp`: Main application class for managing the GUI tabs and widgets.
+
+Functions:
+- `__init__`: Initializes the GUI application.
+- `setup_tabs`: Creates tabs for Inventory, Donations, Distributions, and Recipients.
+- `schedule_real_time_updates`: Schedules periodic updates for inventory and recipient dropdowns.
+- `setup_inventory_tab`: Sets up the Inventory management tab.
+- `setup_recipients_tab`: Sets up the Recipients management tab.
+- `update_item_dropdown`: Updates the inventory item dropdown in real-time.
+- `update_recipient_dropdown`: Updates the recipient dropdown in real-time.
+- `check_notifications`: Checks and displays notifications for low stock or expiring items.
+- `load_inventory`: Loads and displays inventory data in the Inventory tab.
+- `add_inventory_item`: Handles adding a new item to the inventory.
+- `add_recipient_window`: Handles adding a new recipient to the Recipients tab.
+- `load_recipients`: Loads and displays recipients in the Recipients tab.
+- `remove_recipient`: Removes a selected recipient from the Recipients tab.
+- `remove_inventory_item`: Removes a selected item from the Inventory tab.
+- `setup_donation_tab`: Sets up the Donations management tab.
+- `setup_distribution_tab`: Sets up the Distributions management tab.
+- `log_donation`: Logs a new donation and updates inventory.
+- `log_distribution`: Logs a new distribution and updates inventory.
+
+Dependencies:
+- `tkinter`
+- `Inventory`
+- `Notifications`
+- `Donations`
+- `Distributions`
+- `Recipients`
 """
 
 import tkinter as tk
@@ -57,8 +86,8 @@ class FoodPantryApp:
 
     # Schedule real-time updates for the distribution tab.
     def schedule_real_time_updates(self):        
-        self.update_item_dropdown()  # Refresh the dropdown
-        self.root.after(5000, self.schedule_real_time_updates)  # Refresh every 5 seconds    
+        self.update_item_dropdown()
+        self.root.after(5000, self.schedule_real_time_updates)    
 
     def setup_inventory_tab(self):
         ttk.Label(self.inventory_tab, text="Manage Inventory").pack()
@@ -76,7 +105,7 @@ class FoodPantryApp:
         # Buttons for managing inventory
         ttk.Button(self.inventory_tab, text="Add Item", command=self.add_inventory_item).pack()
         ttk.Button(self.inventory_tab, text="Remove Item", command=self.remove_inventory_item).pack()
-        ttk.Button(self.inventory_tab, text="Check Notifications", command=self.check_notifications).pack()  # New button
+        ttk.Button(self.inventory_tab, text="Check Notifications", command=self.check_notifications).pack()
         ttk.Button(self.inventory_tab, text="Refresh", command=self.load_inventory).pack()
 
         self.load_inventory()
@@ -106,12 +135,12 @@ class FoodPantryApp:
     def update_item_dropdown(self):
         try:
             # Fetch current inventory items
-            items = [row[0] for row in Inventory.load_items()]  # Assuming `name` is the first column
+            items = [row[0] for row in Inventory.load_items()]
             self.item_dropdown["values"] = items
             if items:
-                self.item_dropdown.current(0)  # Default to the first item
+                self.item_dropdown.current(0)
             else:
-                self.item_dropdown.set("")  # Clear the dropdown if no items
+                self.item_dropdown.set("")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to update item dropdown: {e}")
 
@@ -165,7 +194,7 @@ class FoodPantryApp:
         )
         type_dropdown["values"] = ("Perishable", "Non-Perishable")
         type_dropdown.grid(row=1, column=1, padx=10, pady=10, sticky="w")
-        type_dropdown.current(0)  # Default to "Perishable"
+        type_dropdown.current(0)  
 
         ttk.Label(add_item_window, text="Quantity:").grid(row=2, column=0, padx=10, pady=10, sticky="e")
         item_quantity = tk.IntVar()
@@ -186,8 +215,8 @@ class FoodPantryApp:
                 try:
                     Inventory.add_item(name, type_, quantity, expiration)
                     messagebox.showinfo("Success", "Item added successfully!")
-                    self.load_inventory()  # Refresh inventory data
-                    add_item_window.destroy()  # Close the window
+                    self.load_inventory() 
+                    add_item_window.destroy() 
                 except Exception as e:
                     messagebox.showerror("Error", f"Failed to add item: {e}")
             else:
@@ -239,7 +268,7 @@ class FoodPantryApp:
                     address = f"{street_address.get()}, {city.get()}, {state.get()} {zipcode.get()}"
                     Recipients.add_recipient(name.get(), phone.get(), address)
                     messagebox.showinfo("Success", "Recipient added successfully!")
-                    self.load_recipients()  # Refresh recipient list
+                    self.load_recipients() 
                     window.destroy()
                 except Exception as e:
                     messagebox.showerror("Error", f"Failed to add recipient: {e}")
@@ -261,7 +290,7 @@ class FoodPantryApp:
             messagebox.showerror("Error", "Please select a recipient to remove.")
             return
 
-        recipient_id = self.recipients_tree.item(selected_item, "values")[0]  # Assuming ID is the first column
+        recipient_id = self.recipients_tree.item(selected_item, "values")[0] 
         confirm = messagebox.askyesno("Confirm", "Are you sure you want to remove this recipient?")
         if confirm:
             try:
@@ -273,14 +302,14 @@ class FoodPantryApp:
 
     # Remove the selected item from inventory.
     def remove_inventory_item(self):
-        selected_item = self.inventory_tree.selection()  # Get selected item from the table
+        selected_item = self.inventory_tree.selection() 
 
         if not selected_item:
             messagebox.showerror("Error", "Please select an item to remove.")
             return
 
         # Get the item's name
-        item_name = self.inventory_tree.item(selected_item, "values")[0]  # Assuming the first column is the name
+        item_name = self.inventory_tree.item(selected_item, "values")[0]
 
         # Confirm deletion
         confirm = messagebox.askyesno("Confirm Removal", f"Are you sure you want to remove '{item_name}'?")
@@ -289,8 +318,8 @@ class FoodPantryApp:
 
         # Remove item from the database
         try:
-            Inventory.remove_item(item_name)  # Call to Inventory module to delete the item
-            self.load_inventory()  # Refresh the table
+            Inventory.remove_item(item_name)  
+            self.load_inventory() 
             messagebox.showinfo("Success", f"Item '{item_name}' removed successfully.")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to remove item: {e}")
@@ -304,13 +333,13 @@ class FoodPantryApp:
         ttk.Entry(self.donation_tab, textvariable=self.donation_name).grid(row=1, column=1, sticky="w")
 
         ttk.Label(self.donation_tab, text="Type:").grid(row=2, column=0, sticky="e")
-        self.donation_type = tk.StringVar()  # Variable for the Combobox
+        self.donation_type = tk.StringVar() 
         self.type_dropdown = ttk.Combobox(
             self.donation_tab, textvariable=self.donation_type, state="readonly"
         )
         self.type_dropdown["values"] = ("Perishable", "Non-Perishable")
         self.type_dropdown.grid(row=2, column=1, sticky="w")
-        self.type_dropdown.current(0)  # Default to "Perishable"
+        self.type_dropdown.current(0) 
 
         ttk.Label(self.donation_tab, text="Quantity:").grid(row=3, column=0, sticky="e")
         self.donation_quantity = tk.IntVar()
@@ -333,7 +362,7 @@ class FoodPantryApp:
             self.distribution_tab, textvariable=self.distribution_item, state="readonly"
         )
         self.item_dropdown.grid(row=1, column=1, sticky="w")
-        self.update_item_dropdown()  # Populate dropdown with inventory items
+        self.update_item_dropdown() 
 
         # Recipient Dropdown
         ttk.Label(self.distribution_tab, text="Recipient:").grid(row=2, column=0, sticky="e")
@@ -342,7 +371,7 @@ class FoodPantryApp:
             self.distribution_tab, textvariable=self.distribution_recipient, state="readonly"
         )
         self.recipient_dropdown.grid(row=2, column=1, sticky="w")
-        self.update_recipient_dropdown()  # Populate dropdown with recipients
+        self.update_recipient_dropdown() 
 
         # Quantity
         ttk.Label(self.distribution_tab, text="Quantity:").grid(row=3, column=0, sticky="e")
@@ -355,12 +384,12 @@ class FoodPantryApp:
     def update_recipient_dropdown(self):
         try:
             # Fetch current recipients
-            recipients = [row[1] for row in Recipients.load_recipients()]  # Assuming `name` is the second column
+            recipients = [row[1] for row in Recipients.load_recipients()]
             self.recipient_dropdown["values"] = recipients
             if recipients:
-                self.recipient_dropdown.current(0)  # Default to the first recipient
+                self.recipient_dropdown.current(0)
             else:
-                self.recipient_dropdown.set("")  # Clear the dropdown if no recipients
+                self.recipient_dropdown.set("")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to update recipient dropdown: {e}")
 
@@ -381,8 +410,8 @@ class FoodPantryApp:
 
                 # Success
                 messagebox.showinfo("Success", "Donation logged and added to inventory successfully!")
-                self.load_inventory()  # Refresh inventory data
-                self.update_item_dropdown()  # Refresh dropdown in the Distribution tab
+                self.load_inventory() 
+                self.update_item_dropdown()
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to log donation: {e}")
         else:
@@ -405,7 +434,7 @@ class FoodPantryApp:
                 messagebox.showerror("Error", "Item not found in inventory.")
                 return
 
-            current_quantity = current_item[2]  # Assuming quantity is the third column
+            current_quantity = current_item[2]
             if quantity > current_quantity:
                 messagebox.showerror("Error", "Insufficient inventory for distribution.")
                 return
@@ -418,8 +447,8 @@ class FoodPantryApp:
 
             # Success
             messagebox.showinfo("Success", "Distribution logged and inventory updated.")
-            self.load_inventory()  # Refresh inventory
-            self.update_item_dropdown()  # Refresh dropdown in real-time
+            self.load_inventory() 
+            self.update_item_dropdown()
         except Exception as e:
             messagebox.showerror("Error", f"Failed to log distribution: {e}")
 

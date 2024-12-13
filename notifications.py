@@ -2,8 +2,16 @@
 Author: Catelynn Barfell
 Date: 12/08/2024
 Assignment: Module 8 Final Project
-Short Desc:
+Short Desc: Notifications Module
+This module handles notifications for low stock and expiring items in the BC Food Pantry system.
 
+Functions:
+- `get_low_stock_items`: Retrieves inventory items with quantities below a specified threshold.
+- `get_expiring_items_within`: Retrieves inventory items that are expiring within a specified number of days.
+
+Dependencies:
+- `connect_db`: Function from the `database` module to establish a connection to the SQLite database.
+- `datetime`: Used for calculating date ranges.
 """
 
 from database import connect_db

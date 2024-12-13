@@ -1,28 +1,40 @@
 """
 Author: Catelynn Barfell
 Date: 12/03/2024
+Assignment: Module 8 Final Project
 Short Desc: Distributions Module
-Handles the logic for logging and managing distributions.
+This module manages the logic for logging and managing item distributions in the BC Food Pantry system.
+
+Class:
+- `Distributions`: Contains static methods to handle distribution operations.
+
+Functions:
+- `log_distribution()`: Logs a distribution entry in the database.
 """
 
 from database import connect_db
 
+# Logs a distribution to the database.
 class Distributions:
     @staticmethod
     def log_distribution(name, quantity, recipient):
-        """
-        Log a distribution to the database.
+        if not name or not recipient:
+            raise ValueError("Name and recipient cannot be empty.")
+        if not isinstance(quantity, int) or quantity <= 0:
+            raise ValueError("Quantity must be a positive integer.")
 
-        Args:
-            name (str): Name of the distributed item.
-            quantity (int): Quantity distributed.
-            recipient (str): Recipient of the distribution.
-        """
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute("""
-            INSERT INTO distributions (name, quantity, distribution_date, recipient)
-            VALUES (?, ?, date('now'), ?)
-        """, (name, quantity, recipient))
-        conn.commit()
-        conn.close()
+        conn = None
+        try:
+            conn = connect_db()
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO distributions (name, quantity, distribution_date, recipient)
+                VALUES (?, ?, date('now'), ?)
+            """, (name, quantity, recipient))
+            conn.commit()
+        except Exception as e:
+            print(f"Error logging distribution: {e}")
+            raise
+        finally:
+            if conn:
+                conn.close()

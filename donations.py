@@ -1,17 +1,25 @@
+"""
+Author: Catelynn Barfell
+Date: 12/10/2024
+Assignment: Module 8 Final Project
+Short Desc: Donations Module
+This module handles all operations related to managing donations in the BC Food Pantry system.
+
+Functions:
+- `log_donation`: Logs a donation record into the database.
+- `get_donations`: Retrieves all donation records from the database.
+
+Dependencies:
+- `connect_db`: Function from the `database` module to establish a connection to the SQLite database.
+"""
+
+
 from database import connect_db
 
 class Donations:
+    # Logs a donation to the database.
     @staticmethod
     def log_donation(name, type_, quantity, donation_date):
-        """
-        Logs a donation to the database.
-
-        Args:
-            name (str): Name of the donated item.
-            type_ (str): Type of the item donated.
-            quantity (int): Quantity of the item donated.
-            donation_date (str): Date of the donation in YYYY-MM-DD format.
-        """
         conn = connect_db()
         cursor = conn.cursor()
         cursor.execute("""
@@ -21,14 +29,9 @@ class Donations:
         conn.commit()
         conn.close()
 
+    # Retrieves all donation records from the database.
     @staticmethod
     def get_donations():
-        """
-        Retrieves all donation records from the database.
-
-        Returns:
-            list: A list of tuples, each containing a donation record.
-        """
         conn = connect_db()
         cursor = conn.cursor()
         cursor.execute("SELECT name, quantity, donation_date FROM donations")

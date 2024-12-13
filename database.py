@@ -2,22 +2,46 @@
 Author: Catelynn Barfell
 Date: 12/03/2024
 Assignment: Module 8 Final Project
-Short Desc: Database Module
-Handles all database-related operations, including setup and connections.
+Short Description: 
+This module manages all database-related operations for the BC Food Pantry system, including connection establishment and table creation.
+
 Functions:
 - `connect_db()`: Establishes a connection to the SQLite database.
-- `setup_database()`: Creates tables for inventory, donations, and distributions.
+- `setup_database()`: Creates or updates tables for inventory, donations, distributions, and recipients.
+
+Database Tables:
+1. `inventory`:
+    - `id` (INTEGER, PRIMARY KEY): Unique identifier for each inventory item.
+    - `name` (TEXT, NOT NULL): Name of the item.
+    - `type` (TEXT, NOT NULL): Type of item (e.g., Perishable, Non-Perishable).
+    - `quantity` (INTEGER, NOT NULL): Quantity of the item in stock.
+    - `expiration_date` (TEXT): Expiration date of the item (if applicable).
+
+2. `donations`:
+    - `id` (INTEGER, PRIMARY KEY): Unique identifier for each donation.
+    - `name` (TEXT, NOT NULL): Name of the donated item.
+    - `type` (TEXT, NOT NULL): Type of item (e.g., Perishable, Non-Perishable).
+    - `quantity` (INTEGER, NOT NULL): Quantity of the donated item.
+    - `donation_date` (TEXT, NOT NULL): Date the donation was logged.
+
+3. `distributions`:
+    - `id` (INTEGER, PRIMARY KEY): Unique identifier for each distribution.
+    - `name` (TEXT, NOT NULL): Name of the distributed item.
+    - `quantity` (INTEGER, NOT NULL): Quantity of the item distributed.
+    - `distribution_date` (TEXT, NOT NULL): Date of distribution.
+    - `recipient` (TEXT, NOT NULL): Name of the recipient.
+
+4. `recipients`:
+    - `id` (INTEGER, PRIMARY KEY): Unique identifier for each recipient.
+    - `name` (TEXT): Name of the recipient.
+    - `contact` (TEXT): Phone number of the recipient.
+    - `address` (TEXT): Address of the recipient.
 """
 
 import sqlite3
 
 # Establish and return a connection to the SQLite database.
-def connect_db():
-    """
-    Establishes and returns a connection to the SQLite database.
-    Returns:
-        sqlite3.Connection: SQLite database connection object.
-    """
+def connect_db():    
     try:
         conn = sqlite3.connect("food_pantry.db")
         return conn
@@ -27,10 +51,6 @@ def connect_db():
 
 # Create or update tables if they do not exist.
 def setup_database():
-    """
-    Sets up the SQLite database by creating or updating tables as needed.
-    Creates the `inventory`, `donations`, and `distributions` tables if they do not exist.
-    """
     conn = None
     try:
         conn = connect_db()

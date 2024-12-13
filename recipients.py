@@ -2,8 +2,16 @@
 Author: Catelynn Barfell
 Date: 12/08/2024
 Assignment: Module 8 Final Project
-Short Desc:
+Short Desc: Recipients Module
+This module handles operations related to recipients in the BC Food Pantry system.
 
+Functions:
+- `add_recipient`: Adds a new recipient to the database.
+- `load_recipients`: Retrieves all recipients from the database.
+- `remove_recipient`: Removes a recipient from the database by their ID.
+
+Dependencies:
+- `connect_db`: Function from the `database` module to establish a connection to the SQLite database.
 """
 
 from database import connect_db
