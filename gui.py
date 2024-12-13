@@ -87,6 +87,7 @@ class FoodPantryApp:
     # Schedule real-time updates for the distribution tab.
     def schedule_real_time_updates(self):        
         self.update_item_dropdown()
+        self.update_recipient_dropdown() 
         self.root.after(5000, self.schedule_real_time_updates)    
 
     def setup_inventory_tab(self):
@@ -440,7 +441,7 @@ class FoodPantryApp:
                 return
 
             # Deduct from inventory
-            Inventory.update_quantity(item_name, current_quantity - quantity)
+            Inventory.update_stock(item_name, current_quantity - quantity)
 
             # Log the distribution
             Distributions.log_distribution(item_name, quantity, recipient)
