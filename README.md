@@ -44,7 +44,11 @@ Required Python libraries:
 
 Usage
 Start the Application: Launch the GUI by running main.py.
+
 Manage Inventory: Navigate to the Inventory tab to add or remove items, refresh the list, and check notifications.
+
 Log Donations: Use the Donations tab to log new donations, automatically updating the inventory.
+
 Log Distributions: Distribute items from inventory to recipients via the Distributions tab.
+
 Manage Recipients: Add or remove recipients in the Recipients tab. Recipients are used in the distribution process.
