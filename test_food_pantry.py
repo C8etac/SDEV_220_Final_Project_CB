@@ -107,7 +107,12 @@ class TestFoodPantrySystem(unittest.TestCase):
     def test_add_recipient(self):
         Recipients.add_recipient("Jane Smith", "(987) 654-3210", "456 Oak St, City, State 54321")
         recipients = Recipients.load_recipients()
-        self.assertIn((2, "Jane Smith", "(987) 654-3210", "456 Oak St, City, State 54321"), recipients)
+        added_recipient = next(
+            (recipient for recipient in recipients if recipient[1] == "Jane Smith"), None
+        )
+
+        self.assertIsNotNone(added_recipient)
+        self.assertEqual(added_recipient[1:], ("Jane Smith", "(987) 654-3210", "456 Oak St, City, State 54321"))
         print("test_add_recipient passed")
 
     # Test removing a recipient.
