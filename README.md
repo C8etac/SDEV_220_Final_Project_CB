@@ -41,8 +41,17 @@ Required Python libraries:
  - tkinter
  - sqlite3
 
+Testing the System
+
+Steps to Run Tests:
+ - Open a terminal and navigate to the project directory.
+ - Run the following command: python -m unittest test_food_pantry.py
+ - Observe the output to verify all tests pass.
+
+These tests cover all major functionalities, including inventory, donations, distributions, notifications, and recipient management.
 
 Usage
+
 Start the Application: Launch the GUI by running main.py.
 
 Manage Inventory: Navigate to the Inventory tab to add or remove items, refresh the list, and check notifications.
@@ -52,3 +61,5 @@ Log Donations: Use the Donations tab to log new donations, automatically updatin
 Log Distributions: Distribute items from inventory to recipients via the Distributions tab.
 
 Manage Recipients: Add or remove recipients in the Recipients tab. Recipients are used in the distribution process.
+
+
