@@ -11,7 +11,7 @@ Functions:
 - `remove_recipient`: Removes a recipient from the database by their ID.
 
 Dependencies:
-- `connect_db`: Function from the `database` module to establish a connection to the SQLite database.
+- `connect_db`
 """
 
 from database import connect_db

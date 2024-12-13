@@ -10,7 +10,7 @@ Functions:
 - `get_donations`: Retrieves all donation records from the database.
 
 Dependencies:
-- `connect_db`: Function from the `database` module to establish a connection to the SQLite database.
+- `connect_db`
 """
 
 
